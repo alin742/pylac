@@ -188,6 +188,11 @@ class Grid(Container):
         self.cap = r*c
         self.row_first = row_first
 
+    def set_gap(self, g):
+        if g > 0.0:
+            self.gap_h = g
+            self.gap_v = g
+
     def set_gaps(self, gh: float, gv: float):
         if gh > 0.0:
             self.gap_h = gh
