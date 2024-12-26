@@ -35,35 +35,28 @@ def draw(screen, layout):
                 )
 
 def generate_layout(pad, gap):
-    back = VStack("back")
-    back.set_padding(pad)
-    back.set_gap(gap)
+    back = VStack("back", padding = [pad, pad, pad, pad], gap = gap)
 
-    header = HStack("header")
-    header.set_gap(gap)
+    header = HStack("header", gap=gap)
     header.add(Container("label1"))
     header.add(Container("label2"))
     header.add(Container("label3"))
     header.add(Container("label4"))
 
-    plots = Grid("plots", 2, 2)
+    plots = Grid("plots", 2, 2, gap = gap)
     plots.set_gaps(gap, gap)
     plots.add(Container("p1"))
     plots.add(Container("p2"))
     plots.add(Container("p3"))
     plots.add(Container("p4"))
 
-    controllers = HStack("controllers")
-    controllers.set_gap(gap)
+    controllers = HStack("controllers", gap = gap)
 
-    motors = VStack("motors")
-    motors.set_gap(gap)
+    motors = VStack("motors", gap = gap)
     motors.add(Container("m1"))
     motors.add(Container("m2"))
 
-    states = Grid("states", 4, 3)
-    states.set_gaps(gap, gap)
-    states.fill_row_first(False)
+    states = Grid("states", 4, 3, gap = gap, row_first = False)
     states.add(Container("s1"))
     states.add(Container("s2"))
     states.add(Container("s3"))

@@ -1,23 +1,45 @@
 from typing import Self
+from collections import ChainMap
+
+CONTAINER_DEFAULTS = {
+    'x': 0,
+    'y': 0,
+    'width': 0,
+    'height': 0,
+    'min_width': 0,
+    'min_height': 0,
+    'padding': [0, 0, 0, 0],
+}
+STACK_DEFAULTS = {
+    'gap': 0,
+}
+GRID_DEFAULTS = {
+    'gv': 0.0,
+    'gh': 0.0,
+    'row_first': True
+}
 
 class Container():
     id: str
+    min_dim: list[float] # min_width, min_height
     dim: list[float] # x, y, width, height
     pad: list[float] # padding_left, padding_right, padding_top, padding_bottom
     children: list[Self]
     ratios: list[int]
 
-    def __init__(
-        self,
-        id: str,
-        x: float = 0.0,
-        y: float = 0.0,
-        w: float = 0.0,
-        h: float = 0.0,
-    ) -> Self:
+    def __init__( self, id, **params ) -> Self:
+        cm = ChainMap(params, CONTAINER_DEFAULTS)
         self.id = id
-        self.dim = [x, y, w, h]
-        self.pad = [0.0, 0.0, 0.0, 0.0]
+        self.min_dim = [
+            cm['min_width'], cm['min_height']
+        ]
+        self.dim = [
+            cm['x'],
+            cm['y'],
+            cm['width'],
+            cm['height'],
+        ]
+        self.pad = cm['padding']
         self.children = []
         self.ratios = []
 
@@ -75,19 +97,12 @@ class VStack(Container):
     gap: float
     el_h: float
     el_w: float
-    def __init__(
-        self,
-        id: str,
-        x: float = 0.0,
-        y: float = 0.0,
-        w: float = 0.0,
-        h: float = 0.0,
-        g: float = 0.0,
-    ):
-        super().__init__(id, x, y, w, h)
+    def __init__( self, id: str, **params ):
+        cm = ChainMap(params, CONTAINER_DEFAULTS, STACK_DEFAULTS)
+        super().__init__(id, **params)
+        self.gap = cm['gap']
         self.el_h = 0.0
         self.el_w = 0.0
-        self.gap = g
 
     def set_gap(self, g: float):
         if g > 0.0:
@@ -118,19 +133,13 @@ class HStack(Container):
     gap: float
     el_h: float
     el_w: float
-    def __init__(
-        self,
-        id: str,
-        x: float = 0.0,
-        y: float = 0.0,
-        w: float = 0.0,
-        h: float = 0.0,
-        g: float = 0.0,
-    ):
-        super().__init__(id, x, y, w, h)
+
+    def __init__( self, id: str, **params ):
+        cm = ChainMap(params, CONTAINER_DEFAULTS, STACK_DEFAULTS)
+        super().__init__(id, **params)
+        self.gap = cm['gap']
         self.el_h = 0.0
         self.el_w = 0.0
-        self.gap = g
 
     def set_gap(self, g: float):
         if g > 0.0:
@@ -165,28 +174,21 @@ class Grid(Container):
     el_w: float
     row_first: bool
 
-    def __init__(
-        self,
-        id: str,
-        r: int,
-        c: int,
-        x: float = 0.0,
-        y: float = 0.0,
-        w: float = 0.0,
-        h: float = 0.0,
-        gv: float = 0.0,
-        gh: float = 0.0,
-        row_first: bool = True
-    ):
-        super().__init__(id, x, y, w, h)
-        self.el_h = 0.0
-        self.el_w = 0.0
-        self.gap_h = gh
-        self.gap_v = gv
+    def __init__( self, id: str, r: int, c: int, **params ):
+        cm = ChainMap(params, CONTAINER_DEFAULTS, STACK_DEFAULTS, GRID_DEFAULTS)
+        super().__init__(id, **params)
         self.r = r
         self.c = c
+        if params['gap'] != 0:
+            self.gap_h = cm['gap']
+            self.gap_v = cm['gap']
+        else: 
+            self.gap_h = cm['gh']
+            self.gap_v = cm['gv']
+        self.row_first = cm['row_first']
+        self.el_h = 0.0
+        self.el_w = 0.0
         self.cap = r*c
-        self.row_first = row_first
 
     def set_gap(self, g):
         if g > 0.0:

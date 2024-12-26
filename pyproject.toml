@@ -10,6 +10,7 @@ dependencies = [
 
 [project.scripts]
 pylac-pygame = "pylac:main"
+test = "pylac:main"
 
 [tool.uv]
 package = true
