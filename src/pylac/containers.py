@@ -78,11 +78,10 @@ class Container():
 
     def get_layout(self) -> dict:
         if not self.children:
-            return {self.id: self.dim}
+            return {self.id: {"dim": self.dim}}
         else:
             return {
-                self.id: self.dim,
-                "children": [child.get_layout() for child in self.children]
+                self.id: {"dim": self.dim} | {child.id: child.get_layout() for child in self.children}
             }
 
     def add(self, child: Self, ratio: int = 1):
