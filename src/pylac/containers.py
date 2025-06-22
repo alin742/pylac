@@ -1,4 +1,4 @@
-from typing import Self
+from typing import Any, Self
 from collections import ChainMap
 
 CONTAINER_DEFAULTS = {
@@ -76,13 +76,11 @@ class Container():
         self.dim[2] = w
         self.dim[3] = h
 
-    def get_layout(self) -> dict:
+    def get_layout(self) -> dict[str, Any]:
         if not self.children:
             return {self.id: {"dim": self.dim}}
         else:
-            return {
-                self.id: {"dim": self.dim} | {child.id: child.get_layout() for child in self.children}
-            }
+            return { self.id: {"dim": self.dim } } | { child.id: child.get_layout() for child in self.children }
 
     def add(self, child: Self, ratio: int = 1):
         self.children.append(child)

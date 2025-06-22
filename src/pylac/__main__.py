@@ -5,32 +5,26 @@ import pygame
 def draw(screen, layout):
     for id, child in layout.items():
         match id:
-            case 'children': [ draw(screen, c) for c in child ]
             case 'back':
                 pygame.draw.rect(
                     screen,
                     (18, 18, 18),
                     pygame.Rect(
-                        child[0],
-                        child[1],
-                        child[2],
-                        child[3],
+                        child['dim'][0],
+                        child['dim'][1],
+                        child['dim'][2],
+                        child['dim'][3],
                     )
                 )
-            case 'controllers': pass
-            case 'states': pass
-            case 'plots': pass
-            case 'motors': pass
-            case 'header': pass
             case _:
                 pygame.draw.rect(
                     screen,
                     (255, 28, 28),
                     pygame.Rect(
-                        child[0],
-                        child[1],
-                        child[2],
-                        child[3],
+                        child['dim'][0],
+                        child['dim'][1],
+                        child['dim'][2],
+                        child['dim'][3],
                     )
                 )
 
