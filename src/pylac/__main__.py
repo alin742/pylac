@@ -16,7 +16,7 @@ def draw(screen, layout):
                         child['dim'][3],
                     )
                 )
-            case _:
+            case 'header':
                 pygame.draw.rect(
                     screen,
                     (255, 28, 28),
@@ -27,6 +27,79 @@ def draw(screen, layout):
                         child['dim'][3],
                     )
                 )
+            case 'controllers':
+                for id, box in child.items():
+                    match id:
+                        case 'motors':
+                            pygame.draw.rect(
+                                screen,
+                                (255, 28, 28),
+                                pygame.Rect(
+                                    box['dim'][0],
+                                    box['dim'][1],
+                                    box['dim'][2],
+                                    box['dim'][3],
+                                )
+                            )
+                        case 'states':
+                            pygame.draw.rect(
+                                screen,
+                                (28, 255, 28),
+                                pygame.Rect(
+                                    box['dim'][0],
+                                    box['dim'][1],
+                                    box['dim'][2],
+                                    box['dim'][3],
+                                )
+                            )
+            case 'plots':
+                for id, plot in child.items():
+                    match id:
+                        case 'p1':
+                            pygame.draw.rect(
+                                screen,
+                                (28, 28, 255),
+                                pygame.Rect(
+                                    plot['dim'][0],
+                                    plot['dim'][1],
+                                    plot['dim'][2],
+                                    plot['dim'][3],
+                                )
+                            )
+                        case 'p2':
+                            pygame.draw.rect(
+                                screen,
+                                (28, 255, 28),
+                                pygame.Rect(
+                                    plot['dim'][0],
+                                    plot['dim'][1],
+                                    plot['dim'][2],
+                                    plot['dim'][3],
+                                )
+                            )
+                        case 'p3':
+                            pygame.draw.rect(
+                                screen,
+                                (255, 28, 28),
+                                pygame.Rect(
+                                    plot['dim'][0],
+                                    plot['dim'][1],
+                                    plot['dim'][2],
+                                    plot['dim'][3],
+                                )
+                            )
+                        case 'p4':
+                            pygame.draw.rect(
+                                screen,
+                                (255, 255, 28),
+                                pygame.Rect(
+                                    plot['dim'][0],
+                                    plot['dim'][1],
+                                    plot['dim'][2],
+                                    plot['dim'][3],
+                                )
+                            )
+
 
 def generate_layout(pad, gap):
     back = VStack("back", padding = [pad, pad, pad, pad], gap = gap)
@@ -81,6 +154,7 @@ def main():
             [container.set_gap(0.02*screen.get_width()) for container in containers]
             containers[0].update()
             layout = containers[0].get_layout()
+            print(layout)
             draw(screen, layout)
             pygame.display.flip()
             clock.tick(120)
