@@ -176,7 +176,7 @@ class Grid(Container):
         super().__init__(id, **params)
         self.r = r
         self.c = c
-        if params['gap'] != 0:
+        if params['gap'] != 0.0:
             self.gap_h = cm['gap']
             self.gap_v = cm['gap']
         else: 
